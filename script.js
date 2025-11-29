@@ -125,67 +125,6 @@ window.addEventListener('scroll', () => {
 });
 
 // ===============================================
-// STATISTICS COUNTER ANIMATION
-// ===============================================
-
-const animateCounter = (element, target, duration = 2000) => {
-    const start = 0;
-    const increment = target / (duration / 16); // 60fps
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        
-        // Format the number
-        let displayValue = Math.floor(current);
-        if (target >= 1000) {
-            displayValue = (displayValue / 1000).toFixed(0) + 'K+';
-        } else if (target >= 90) {
-            displayValue = displayValue + '%';
-        } else {
-            displayValue = displayValue + '+';
-        }
-        
-        element.textContent = displayValue;
-    }, 16);
-};
-
-// Observe stats and animate when visible
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const statNumbers = entry.target.querySelectorAll('.stat-number');
-            statNumbers.forEach((stat) => {
-                const text = stat.textContent;
-                let target = 0;
-                
-                if (text.includes('K+')) {
-                    target = parseInt(text.replace('K+', '')) * 1000;
-                } else if (text.includes('%')) {
-                    target = parseInt(text.replace('%', ''));
-                } else {
-                    target = parseInt(text.replace('+', ''));
-                }
-                
-                stat.textContent = '0';
-                setTimeout(() => animateCounter(stat, target), 200);
-            });
-            
-            statsObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
-
-const heroStats = document.querySelector('.hero-stats');
-if (heroStats) {
-    statsObserver.observe(heroStats);
-}
-
-// ===============================================
 // BUTTON RIPPLE EFFECT
 // ===============================================
 
